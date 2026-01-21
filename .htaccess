@@ -1,0 +1,38 @@
+RewriteEngine On
+RewriteBase /
+
+# ===========================
+# Clean URL otomatis untuk auth/, user/, admin/
+# ===========================
+
+# auth/
+RewriteCond %{DOCUMENT_ROOT}/auth/$1.php -f
+RewriteRule ^(register|login|logout)$ auth/$1.php [L,QSA]
+
+# user/
+RewriteCond %{DOCUMENT_ROOT}/user/$1.php -f
+RewriteRule ^(dashboard|form_artikel|form_competition|form_events|form_ipk|form_leadership|form_participation|form_pemateri|profil)$ user/$1.php [L,QSA]
+
+# admin/
+RewriteCond %{DOCUMENT_ROOT}/admin/$1.php -f
+RewriteRule ^(admin_dashboard|admin_delete_record|admin_detail|admin_edit_record)$ admin/$1.php [L,QSA]
+
+# Redirect .php ke clean URL
+RewriteCond %{THE_REQUEST} \s/+([^.]+)\.php[\s?] [NC]
+RewriteRule ^ %1 [R=301,L]
+
+# Jangan ubah file/folder asli
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Hilangkan .php dari root
+RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+RewriteRule ^(.+)$ $1.php [L,QSA]
+
+# Hilangkan /index
+RewriteRule ^index$ / [L,R=301]
+
+# Redirect /admin_download_rekap?user_id=37 ke admin_download_rekap.php
+RewriteRule ^admin_download_rekap$ admin/admin_download_rekap.php [L,QSA]
+
